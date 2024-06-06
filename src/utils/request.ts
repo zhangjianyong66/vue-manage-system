@@ -1,7 +1,8 @@
 import axios, { AxiosInstance, AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 
 const service: AxiosInstance = axios.create({
-    timeout: 5000
+    timeout: 5000,
+    baseURL:"/api"
 });
 
 service.interceptors.request.use(

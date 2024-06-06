@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
-import { usePermissStore } from '../store/permiss';
+import { usePermissStore } from '@/store/permiss';
 import Home from '../views/home.vue';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
@@ -19,7 +19,6 @@ const routes: RouteRecordRaw[] = [
                 name: 'dashboard',
                 meta: {
                     title: '系统首页',
-                    noAuth: true,
                 },
                 component: () => import(/* webpackChunkName: "dashboard" */ '../views/dashboard.vue'),
             },
@@ -273,10 +272,11 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     NProgress.start();
-    const role = localStorage.getItem('vuems_name');
+    //const role = localStorage.getItem('vuems_name');
     const permiss = usePermissStore();
+    const manageUser= localStorage.getItem("manageUser");
 
-    if (!role && to.meta.noAuth !== true) {
+    if (!manageUser && to.meta.noAuth !== true) {
         next('/login');
     } else if (typeof to.meta.permiss == 'string' && !permiss.key.includes(to.meta.permiss)) {
         // 如果没有权限，则进入403
