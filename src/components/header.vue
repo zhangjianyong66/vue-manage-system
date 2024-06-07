@@ -62,11 +62,13 @@
         </div>
     </div>
 </template>
+
 <script setup lang="ts">
 import { onMounted } from 'vue';
-import { useSidebarStore } from '../store/sidebar';
+import { useSidebarStore } from '@/store/sidebar';
 import { useRouter } from 'vue-router';
 import imgurl from '../assets/img/img.jpg';
+import {ArrowDown, Expand, Fold} from "@element-plus/icons-vue";
 
 const username: string | null = localStorage.getItem('vuems_name');
 const message: number = 2;
@@ -179,7 +181,7 @@ const setFullScreen = () => {
 .btn-bell-badge {
     position: absolute;
     right: 4px;
-    top: 0px;
+    top: 0;
     width: 8px;
     height: 8px;
     border-radius: 4px;

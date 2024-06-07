@@ -92,9 +92,12 @@ const submitForm = (formEl: FormInstance | undefined) => {
         if (res.data.code === 200) {
           ElMessage.success('登录成功');
           //localStorage.setItem('vuems_name', param.username);
-          localStorage.setItem("manageUser", res.data)
-          const keys = permiss.defaultList[param.username == 'admin' ? 'admin' : 'user'];
-          permiss.handleSet(keys);
+          //用户缓存
+          localStorage.setItem('manageUser', res.data)
+          //权限缓存
+          localStorage.setItem('role','admin')
+         /* const keys = permiss.defaultList[param.username == 'admin' ? 'admin' : 'user'];
+          permiss.handleSet(keys);*/
           router.push('/');
           if (checked.value) {
             localStorage.setItem('login-param', JSON.stringify(param));
