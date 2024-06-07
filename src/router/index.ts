@@ -231,6 +231,14 @@ const routes: RouteRecordRaw[] = [
         component: () => import(/* webpackChunkName: "login" */ '../views/pages/login.vue'),
     },
     {
+        path: '/product',
+        meta: {
+            title: '产品管理',
+            noAuth: false,
+        },
+        component: () => import(/* webpackChunkName: "login" */ '../views/pages/login.vue'),
+    },
+    {
         path: '/register',
         meta: {
             title: '注册',

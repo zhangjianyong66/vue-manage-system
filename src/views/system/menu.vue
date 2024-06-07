@@ -35,7 +35,7 @@
     </div>
 </template>
 
-<script setup lang="ts" name="system-menu">
+<script setup lang="ts">
 import { ref } from 'vue';
 import { ElMessage } from 'element-plus';
 import { CirclePlusFilled } from '@element-plus/icons-vue';
@@ -44,6 +44,7 @@ import TableCustom from '@/components/table-custom.vue';
 import TableDetail from '@/components/table-detail.vue';
 import { FormOption } from '@/types/form-option';
 import { menuData } from '@/components/menu';
+import TableEdit from "@/components/table-edit.vue";
 
 // 表格相关
 let columns = ref([

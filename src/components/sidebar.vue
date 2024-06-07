@@ -51,18 +51,18 @@
         </el-menu>
     </div>
 </template>
-
 <script setup lang="ts">
 import { computed } from 'vue';
-import { useSidebarStore } from '../store/sidebar';
+import { useSidebarStore } from '@/store/sidebar';
 import { useRoute } from 'vue-router';
 import { menuData } from '@/components/menu';
-
+import {usePermissStore} from "@/store/permiss";
+console.log('menuData',menuData)
 const route = useRoute();
 const onRoutes = computed(() => {
     return route.path;
 });
-
+const permiss = usePermissStore();
 const sidebar = useSidebarStore();
 </script>
 

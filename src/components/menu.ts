@@ -1,4 +1,4 @@
-import { Menus } from '@/types/menu';
+import {Menus} from '@/types/menu';
 
 export const menuData: Menus[] = [
     {
@@ -217,5 +217,11 @@ export const menuData: Menus[] = [
                 title: '404',
             },
         ],
+    },
+    {
+        id: '8',
+        icon: 'Guide',
+        index: '/product',
+        title: '产品管理',
     },
 ];
