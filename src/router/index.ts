@@ -1,5 +1,5 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
-import { usePermissStore } from '@/store/permiss';
+import {createRouter, createWebHashHistory, RouteRecordRaw} from 'vue-router';
+import {usePermissStore} from '@/store/permiss';
 import Home from '../views/home.vue';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
@@ -220,6 +220,14 @@ const routes: RouteRecordRaw[] = [
                 },
                 component: () => import(/* webpackChunkName: "statistic" */ '../views/element/statistic.vue'),
             },
+            {
+                path: '/product',
+                meta: {
+                    title: '产品管理',
+                    permiss: '8',
+                },
+                component: () => import(/* webpackChunkName: "login" */ '../views/product/product-table.vue'),
+            },
         ],
     },
     {
@@ -230,14 +238,7 @@ const routes: RouteRecordRaw[] = [
         },
         component: () => import(/* webpackChunkName: "login" */ '../views/pages/login.vue'),
     },
-    {
-        path: '/product',
-        meta: {
-            title: '产品管理',
-            noAuth: false,
-        },
-        component: () => import(/* webpackChunkName: "login" */ '../views/pages/login.vue'),
-    },
+
     {
         path: '/register',
         meta: {
@@ -270,7 +271,7 @@ const routes: RouteRecordRaw[] = [
         },
         component: () => import(/* webpackChunkName: "404" */ '../views/pages/404.vue'),
     },
-    { path: '/:path(.*)', redirect: '/404' },
+    {path: '/:path(.*)', redirect: '/404'},
 ];
 
 const router = createRouter({
@@ -282,7 +283,7 @@ router.beforeEach((to, from, next) => {
     NProgress.start();
     //const role = localStorage.getItem('vuems_name');
     const permiss = usePermissStore();
-    const manageUser= localStorage.getItem("manageUser");
+    const manageUser = localStorage.getItem("manageUser");
 
     if (!manageUser && to.meta.noAuth !== true) {
         next('/login');
