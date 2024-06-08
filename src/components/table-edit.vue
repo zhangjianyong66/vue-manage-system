@@ -6,8 +6,10 @@
           <!-- 文本框、数字框、下拉框、日期框、开关、上传 -->
           <el-input v-if="item.type === 'input'" v-model="form[item.prop]" :disabled="item.disabled"
                     :placeholder="item.placeholder" clearable></el-input>
-          <el-input-number v-else-if="item.type === 'number'" v-model="form[item.prop]"
-                           :disabled="item.disabled" controls-position="right"></el-input-number>
+          <el-input v-else-if="item.type === 'number'" v-model="form[item.prop]" type="number"
+                    :disabled="item.disabled" :placeholder="item.placeholder" clearable></el-input>
+          <el-input v-else-if="item.type === 'textarea'" v-model="form[item.prop]" type="textarea"
+                    :disabled="item.disabled" :placeholder="item.placeholder" clearable></el-input>
           <el-select v-else-if="item.type === 'select'" v-model="form[item.prop]" :disabled="item.disabled"
                      :placeholder="item.placeholder" clearable>
             <el-option v-for="opt in item.opts" :label="opt.label" :value="opt.value"></el-option>
@@ -17,18 +19,16 @@
           <el-switch v-else-if="item.type === 'switch'" v-model="form[item.prop]"
                      :active-value="item.activeValue" :inactive-value="item.inactiveValue"
                      :active-text="item.activeText" :inactive-text="item.inactiveText"></el-switch>
-          <el-upload v-else-if="item.type === 'upload'" class="avatar-uploader" action="#"
-                     :show-file-list="false" :on-success="handleAvatarSuccess">
-            <img v-if="form[item.prop]" :src="form[item.prop]" class="avatar" alt=""/>
-            <el-icon v-else class="avatar-uploader-icon">
+          <el-upload v-else-if="item.type === 'upload'" class="image-uploader"
+                     :action="item.action" :data="item.data"
+                     :show-file-list="false"
+                     :on-success="(response: any)=>{return uploadSuccess(response,item)}">
+            <img v-if="form[item.prop+'_show']" :src="form[item.prop+'_show']" class="image" alt=""/>
+            <el-icon v-else class="image-uploader-icon">
               <Plus/>
             </el-icon>
           </el-upload>
-          <textarea v-if="item.type === 'textarea'" v-model="form[item.prop]">
-
-          </textarea>
           <slot :name="item.prop" v-else>
-
           </slot>
         </el-form-item>
       </el-col>
@@ -41,10 +41,11 @@
 </template>
 
 <script lang="ts" setup>
-import {FormOption} from '@/types/form-option';
-import {FormInstance, FormRules, UploadProps} from 'element-plus';
+import {FormOption, FormOptionList} from '@/types/form-option';
+import {ElMessage, FormInstance, FormRules} from 'element-plus';
 import {PropType, ref} from 'vue';
 import {Plus} from "@element-plus/icons-vue";
+import {pathToUrl} from "@/utils/image";
 
 const {options, formData, edit, update} = defineProps({
   options: {
@@ -85,8 +86,15 @@ const saveEdit = (formEl: FormInstance | undefined) => {
   });
 };
 
-const handleAvatarSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
-  form.value.thumb = URL.createObjectURL(uploadFile.raw!);
+const uploadSuccess = (response: any, item: FormOptionList) => {
+  if (response.code === 200) {
+    form.value[item.prop] = response.data
+    form.value[item.prop + '_show'] = pathToUrl(response.data)
+    //form.value.thumb = URL.createObjectURL(uploadFile.raw!);
+  } else {
+    ElMessage.error(response.message);
+  }
+
 };
 
 </script>
@@ -97,7 +105,11 @@ textarea {
   height: 8rem;
 }
 
-.avatar-uploader .el-upload {
+.image {
+  width: 100%;
+}
+
+.image-uploader .el-upload {
   border: 1px dashed var(--el-border-color);
   border-radius: 6px;
   cursor: pointer;
@@ -106,11 +118,11 @@ textarea {
   transition: var(--el-transition-duration-fast);
 }
 
-.avatar-uploader .el-upload:hover {
+.image-uploader .el-upload:hover {
   border-color: var(--el-color-primary);
 }
 
-.el-icon.avatar-uploader-icon {
+.el-icon.image-uploader-icon {
   font-size: 28px;
   color: #8c939d;
   width: 178px;

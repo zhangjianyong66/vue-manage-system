@@ -2,7 +2,7 @@ import axios, { AxiosInstance, AxiosError, AxiosResponse, InternalAxiosRequestCo
 
 const service: AxiosInstance = axios.create({
     timeout: 5000,
-    baseURL:"/api"
+    baseURL: import.meta.env.VITE_BASE_API,
 });
 
 service.interceptors.request.use(

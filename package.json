@@ -3,7 +3,7 @@
 	"version": "5.5.0",
 	"private": true,
 	"scripts": {
-		"dev": "vite",
+		"dev": "vite --mode dev",
 		"build": "vue-tsc --noEmit && vite build",
 		"serve": "vite preview"
 	},

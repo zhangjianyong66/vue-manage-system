@@ -42,7 +42,7 @@ export const remove = (id: number) => {
     });
 }
 
-interface guideTravelPackageSearchParam {
+export interface guideTravelPackageSearchParam {
 
 }
 
