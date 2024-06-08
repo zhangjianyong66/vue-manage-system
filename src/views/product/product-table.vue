@@ -8,17 +8,9 @@
         <template #toolbarBtn>
           <el-button type="warning" :icon="CirclePlusFilled" @click="visible = true">新增</el-button>
         </template>
-        <template #money="{ rows }">
-          ￥{{ rows.money }}
-        </template>
-        <template #thumb="{ rows }">
-          <el-image class="table-td-thumb" :src="rows.thumb" :z-index="10" :preview-src-list="[rows.thumb]"
-                    preview-teleported>
-          </el-image>
-        </template>
         <template #state="{ rows }">
-          <el-tag :type="rows.state ? 'success' : 'danger'">
-            {{ rows.state ? '正常' : '异常' }}
+          <el-tag :type="rows.state===0 ? 'success' : 'danger'">
+            {{ rows.state === 0 ? '上架' : '下架' }}
           </el-tag>
         </template>
       </TableCustom>
@@ -49,7 +41,11 @@ import {TableItem} from '@/types/table';
 import {FormOption, FormOptionList} from '@/types/form-option';
 import TableEdit from "@/components/table-edit.vue";
 import {ElMessage} from "element-plus";
-import {guideTravelPackageSearchParam, page as guideTravelPackagePage, save as guideTravelPackageSave} from "@/api/product";
+import {
+  guideTravelPackageSearchParam,
+  page as guideTravelPackagePage,
+  save as guideTravelPackageSave
+} from "@/api/product";
 
 // 查询相关
 const query = reactive({
@@ -65,12 +61,27 @@ const handleSearch = () => {
 // 表格相关
 let columns = ref([
   {type: 'selection'},
-  {type: 'index', label: '序号', width: 55, align: 'center'},
-  {prop: 'name', label: '用户名'},
-  {prop: 'money', label: '账户余额'},
-  {prop: 'thumb', label: '头像'},
-  {prop: 'state', label: '账户状态'},
-  {prop: 'operator', label: '操作', width: 250},
+  {type: 'index', label: '序号', width: 55, align: 'center', visible: false},
+  {prop: 'id', label: 'id', visible: false},
+
+  {prop: 'title', label: '标题'},
+  {type: 'img', prop: 'image', label: '产品图'},
+  {prop: 'duration', label: '时长'},
+  {prop: 'price', label: '价格'},
+  {prop: 'area', label: '地区'},
+  {prop: 'province', label: '省', visible: false},
+  {prop: 'city', label: '市', visible: false},
+  {prop: 'district', label: '区', visible: false},
+
+  {prop: 'address', label: '地址'},
+  {type: 'img', prop: 'introImage', label: '简介图'},
+  {prop: 'hostPerson', label: '招待人'},
+  {prop: 'hostIntroduction', label: '招待人简介'},
+  {type: 'img', prop: 'hostAvatar', label: '招待人头像'},
+  {type: 'img', prop: 'locationMap', label: '地点图'},
+  {prop: 'locationDetail', label: '地点详情'},
+  {prop: 'state', label: '状态'},
+  {prop: 'operator', label: '操作', width: 250, fixed: 'right'},
 ])
 const page = reactive({
   index: 1,
@@ -79,51 +90,15 @@ const page = reactive({
 })
 
 const searchParma: guideTravelPackageSearchParam = {}
-const tableData = ref<TableItem[]>([]);
+let tableData = ref<TableItem[]>([]);
 const getData = async () => {
   const res = await guideTravelPackagePage(page.index, page.size, searchParma)
-  tableData.value = res.data.list;
+  tableData.value = res.data.data.records;
+  page.index = res.data.data.current ?? 1;
+  page.total = res.data.data.total ?? 100;
 };
 getData();
 
-tableData.value = [
-  {
-    "id": 1,
-    "name": "张三",
-    "money": 123,
-    "address": "广东省东莞市长安镇",
-    "state": 'true',
-    "date": "2019-11-1",
-    "thumb": "https://lin-xin.gitee.io/images/post/wms.png"
-  },
-  {
-    "id": 2,
-    "name": "李四",
-    "money": 456,
-    "address": "广东省广州市白云区",
-    "state": 'true',
-    "date": "2019-10-11",
-    "thumb": "https://lin-xin.gitee.io/images/post/node3.png"
-  },
-  {
-    "id": 3,
-    "name": "王五",
-    "money": 789,
-    "address": "湖南省长沙市",
-    "state": 'false',
-    "date": "2019-11-11",
-    "thumb": "https://lin-xin.gitee.io/images/post/parcel.png"
-  },
-  {
-    "id": 4,
-    "name": "赵六",
-    "money": 1011,
-    "address": "福建省厦门市鼓浪屿",
-    "state": 'true',
-    "date": "2019-10-20",
-    "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
-  }
-]
 const changePage = (val: number) => {
   page.index = val;
   getData();

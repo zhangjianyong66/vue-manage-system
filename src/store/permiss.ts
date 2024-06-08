@@ -13,6 +13,7 @@ export const usePermissStore = defineStore('permiss', {
             user: ['0', '1', '11', '12', '13'],
         };
         const role = localStorage.getItem('role') || '';
+        console.log('role',role);
         return {
             key: (role == 'admin' ? defaultList.admin : defaultList.user) as string[],
             defaultList,

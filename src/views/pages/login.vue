@@ -96,8 +96,9 @@ const submitForm = (formEl: FormInstance | undefined) => {
           localStorage.setItem('manageUser', res.data)
           //权限缓存
           localStorage.setItem('role','admin')
-         /* const keys = permiss.defaultList[param.username == 'admin' ? 'admin' : 'user'];
-          permiss.handleSet(keys);*/
+          //更新权限
+          const keys = permiss.defaultList['admin'];
+          permiss.handleSet(keys);
           router.push('/');
           if (checked.value) {
             localStorage.setItem('login-param', JSON.stringify(param));

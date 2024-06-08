@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosError, AxiosResponse, InternalAxiosRequestConfig } from 'axios';
 
 const service: AxiosInstance = axios.create({
-    timeout: 5000,
+    timeout: 10000,
     baseURL: import.meta.env.VITE_BASE_API,
 });
 
