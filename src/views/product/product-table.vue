@@ -135,10 +135,24 @@ let options = ref<FormOption>({
   labelWidth: '100px',
   span: 24,
   list: [
-    {type: 'input', label: '用户名', prop: 'name', required: true},
-    {type: 'number', label: '账户余额', prop: 'money', required: true},
-    {type: 'switch', activeText: '正常', inactiveText: '异常', label: '账户状态', prop: 'state', required: true},
-    {type: 'upload', label: '头像', prop: 'thumb', required: true},
+    {type: 'input', label: '标题', prop: 'title', required: true},
+    {type: 'upload', label: '产品图', prop: 'image', required: true},
+    {type: 'input', label: '时长', prop: 'duration', required: true},
+    {type: 'number', label: '价格', prop: 'price', required: true},
+    {type: 'input', label: '地区', prop: 'area', required: true},
+    {type: 'input', label: '省', prop: 'province', required: true},
+    {type: 'input', label: '市', prop: 'city', required: true},
+    {type: 'input', label: '区', prop: 'district', required: true},
+    {type: 'input', label: '地址', prop: 'address', required: true},
+
+    {type: 'upload', label: '简介图', prop: 'introImage', required: true},
+    {type: 'input', label: '招待人', prop: 'hostPerson', required: true},
+    {type: 'textarea', label: '招待人简介', prop: 'hostIntroduction', required: true},
+    {type: 'upload', label: '招待人头像', prop: 'hostAvatar', required: true},
+    {type: 'upload', label: '地点图', prop: 'locationMap', required: true},
+    {type: 'textarea', label: '地点详情', prop: 'locationDetail', required: true},
+    {type: 'switch', label: '状态',activeText: '上架', inactiveText: '下架', prop: 'state', required: true},
+
   ]
 })
 const visible = ref(false);

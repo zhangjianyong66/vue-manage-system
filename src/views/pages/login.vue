@@ -51,7 +51,7 @@ import {usePermissStore} from '@/store/permiss';
 import {useRouter} from 'vue-router';
 import type {FormInstance, FormRules} from 'element-plus';
 import {ElMessage} from 'element-plus';
-import {manageUserlogin} from "@/api";
+import {manageUserlogin} from "@/api/user";
 import {Lock} from "@element-plus/icons-vue";
 
 
