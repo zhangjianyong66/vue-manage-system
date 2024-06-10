@@ -48,11 +48,11 @@ import {Plus} from "@element-plus/icons-vue";
 import {pathToUrl} from "@/utils/image";
 
 const {options, formData, edit, update} = defineProps({
-  options: {
+  options: {//字段配置
     type: Object as PropType<FormOption>,
     required: true
   },
-  formData: {
+  formData: {//数据
     type: Object,
     required: true
   },
@@ -86,6 +86,13 @@ const saveEdit = (formEl: FormInstance | undefined) => {
   });
 };
 
+const initImageShow = () => {
+  options.list
+      .filter(o => o.type === 'upload')
+      .forEach(o => form.value[o.prop + '_show'] = pathToUrl(form.value[o.prop]))
+
+}
+initImageShow()
 const uploadSuccess = (response: any, item: FormOptionList) => {
   if (response.code === 200) {
     form.value[item.prop] = response.data

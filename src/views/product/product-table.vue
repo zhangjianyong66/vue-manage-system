@@ -42,17 +42,20 @@ import {FormOption, FormOptionList} from '@/types/form-option';
 import TableEdit from "@/components/table-edit.vue";
 import {ElMessage} from "element-plus";
 import {
-  guideTravelPackageSearchParam,
-  page as guideTravelPackagePage,
-  save as guideTravelPackageSave
+  GuideTravelPackageSearchParam,
+  pageAsync as guideTravelPackagePage,
+  removeAsync as guideTravelPackageRemove,
+  saveAsync as guideTravelPackageSave,
+  updateAsync as guideTravelPackageUpdate,
 } from "@/api/product";
+import {ApiResponse} from "@/types/api-response";
 
 // 查询相关
 const query = reactive({
   name: '',
 });
 const searchOpt = ref<FormOptionList[]>([
-  {type: 'input', label: '用户名：', prop: 'name'}
+  //{type: 'input', label: '用户名：', prop: 'name'}
 ])
 const handleSearch = () => {
   changePage(1);
@@ -89,13 +92,14 @@ const page = reactive({
   total: 200,
 })
 
-const searchParma: guideTravelPackageSearchParam = {}
+const searchParma: GuideTravelPackageSearchParam = {}
 let tableData = ref<TableItem[]>([]);
 const getData = async () => {
-  const res = await guideTravelPackagePage(page.index, page.size, searchParma)
-  tableData.value = res.data.data.records;
-  page.index = res.data.data.current ?? 1;
-  page.total = res.data.data.total ?? 100;
+  const resData = await guideTravelPackagePage(page.index, page.size, searchParma)
+  tableData.value = resData?.data?.records
+  page.index = resData?.data?.current ?? 1
+  page.total = resData?.data?.total ?? 100
+  ElMessage.success(resData.message)
 };
 getData();
 
@@ -143,8 +147,8 @@ let options = ref<FormOption>({
 
   ]
 })
-const visible = ref(false);
-const isEdit = ref(false);
+const visible = ref(false);//编辑新增显示标记
+const isEdit = ref(false);//是否编辑
 const rowData = ref({});
 const handleEdit = (row: TableItem) => {
   rowData.value = {...row};
@@ -154,14 +158,18 @@ const handleEdit = (row: TableItem) => {
 
 //保存数据
 const updateData = async (form: any) => {
-  const res = await guideTravelPackageSave(form)
-  if (res.data.code === 200) {
-    console.log(res.data.data)
-    ElMessage.success(res.data.message)
+  let resData: ApiResponse;
+  if (isEdit.value) {//更新
+    resData = await guideTravelPackageUpdate(form.id, form)
+  } else {//新增
+    resData = await guideTravelPackageSave(form)
+  }
+  if (resData.code === 200) {
+    ElMessage.success(resData.message)
     closeDialog();
     await getData();
   } else {
-    ElMessage.error(res.data.message)
+    ElMessage.error(resData.message)
   }
 
 };
@@ -179,6 +187,7 @@ const viewData = ref({
 });
 const handleView = (row: TableItem) => {
   viewData.value.row = {...row}
+  // rowData.value = {...row};
   viewData.value.list = [
     {
       prop: 'id',
@@ -205,8 +214,14 @@ const handleView = (row: TableItem) => {
 };
 
 // 删除相关
-const handleDelete = (row: TableItem) => {
-  ElMessage.success('删除成功');
+const handleDelete = async (row: TableItem) => {
+  const resData = await guideTravelPackageRemove(row.id);
+  if (resData.code === 200) {
+    ElMessage.success(res.data.message);
+    await getData();
+  } else {
+    ElMessage.error(res.data.message);
+  }
 }
 </script>
 
